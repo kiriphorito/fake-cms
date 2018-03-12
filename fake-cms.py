@@ -35,9 +35,12 @@ class Fcms:
             self.grid_observation[shard[0]][shard[1]] = MINERAL
         for marine in self.position_marines:
             self.grid_observation[marine[0]][marine[1]] = MARINE
-        # print('\n'.join([''.join(['{:2}'.format(item) for item in row]) for row in self.grid_observation]))
-        for x in range(0,self.grid_height):
-            print(self.grid_observation[x])
+        print(self.position_marines)
+        for x in range(0, self.grid_height):
+            print("",end = " ")
+            for y in range(0, self.grid_width):
+                print(self.grid_observation[y][x], end = " ")
+            print()
         return self.grid_observation
 
     def collision_check(self, position):
