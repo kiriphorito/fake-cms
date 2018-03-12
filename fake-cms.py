@@ -46,13 +46,13 @@ class Fcms:
 
     def boundary_check(self, marine):
         if self.position_marines[marine][0] >= self.grid_width:
-            self.marines[marine][0] = self.grid_width - 1
-        elif self.marines[marine][0] < 0:
-            self.marines[marine][0] = 0
+            self.position_marines[marine][0] = self.grid_width - 1
+        elif self.position_marines[marine][0] < 0:
+            self.position_marines[marine][0] = 0
         if self.position_marines[marine][1] >= self.grid_height:
-            self.marines[marine][1] = self.grid_height - 1
-        elif self.marines[marine][1] < 0:
-            self.marines[marine][1] = 0
+            self.position_marines[marine][1] = self.grid_height - 1
+        elif self.position_marines[marine][1] < 0:
+            self.position_marines[marine][1] = 0
 
     def action_up(self, marine = 0):
         new_position = self.position_marines[marine]
