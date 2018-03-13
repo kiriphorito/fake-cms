@@ -5,7 +5,9 @@ MARINE = 1
 MINERAL = 2
 
 class Fcms:
-    def __init__(self, marines = 1, shards = 20, grid_x = 5, grid_y = 5):
+    def __init__(self, marines = 1, shards = 20, grid_x = 5, grid_y = 5, verbose = False):
+        self.verbose = verbose
+
         self.number_of_marines = marines
         self.number_of_shards = shards
         self.grid_width = grid_x
@@ -26,8 +28,9 @@ class Fcms:
             random_location = [rnd.randint(0,self.grid_width - 1), rnd.randint(0,self.grid_height - 1)]
             if random_location not in self.position_shards and random_location not in self.position_marines:
                 self.position_marines.append(random_location)
-        print(self.position_shards)
-        print(self.position_marines)
+        if self.verbose:
+            print(self.position_shards)
+            print(self.position_marines)
 
     def observation(self):
         self.grid_observation = [[0 for i in range(self.grid_width)] for j in range(self.grid_height)]
@@ -35,12 +38,14 @@ class Fcms:
             self.grid_observation[shard[0]][shard[1]] = MINERAL
         for marine in self.position_marines:
             self.grid_observation[marine[0]][marine[1]] = MARINE
-        print(self.position_marines)
-        for x in range(0, self.grid_height):
-            print("",end = " ")
-            for y in range(0, self.grid_width):
-                print(self.grid_observation[y][x], end = " ")
-            print()
+        if self.verbose:
+            print("-------------")
+            print(self.position_marines)
+            for x in range(0, self.grid_height):
+                print("",end = " ")
+                for y in range(0, self.grid_width):
+                    print(self.grid_observation[y][x], end = " ")
+                print()
         return self.grid_observation
 
     def collision_check(self, position):
@@ -95,26 +100,19 @@ class Fcms:
         self.boundary_check(marine)
         self.collision_check(new_position)
 
-fcms = Fcms()
-print(fcms.number_of_shards)
-print(fcms.number_of_marines)
+fcms = Fcms(1, 1, 8, 8, True)
 fcms.observation()
 
-print("-------------")
+
 fcms.action_up()
 fcms.observation()
-print("-------------")
 fcms.action_down()
 fcms.observation()
-print("-------------")
 fcms.action_left()
 fcms.observation()
-print("-------------")
 fcms.action_up()
 fcms.observation()
-print("-------------")
 fcms.action_up()
 fcms.observation()
-print("-------------")
 fcms.action_right()
 fcms.observation()
