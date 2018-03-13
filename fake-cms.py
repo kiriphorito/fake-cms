@@ -57,6 +57,16 @@ class Fcms:
         elif self.position_marines[marine][1] < 0:
             self.position_marines[marine][1] = 0
 
+    def action(self, action, marine = 0):
+        if action == 0:
+            action_up(marine)
+        elif action == 1:
+            action_down(marine)
+        elif action == 2:
+            action_left(marine)
+        elif action == 3:
+            action_right(marine)
+
     def action_up(self, marine = 0):
         new_position = self.position_marines[marine]
         new_position[1] -= 1
