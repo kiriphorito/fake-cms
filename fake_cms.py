@@ -1,4 +1,5 @@
 import random as rnd
+import numpy as np
 
 EMPTY = 0
 MARINE = 1
@@ -29,6 +30,7 @@ class Fcms:
         self.position_marines = None
         self.reset()
         self.reward = 0
+        self.action_space = action_space
 
     def reset(self):
         self.position_shards = []
@@ -63,6 +65,19 @@ class Fcms:
 
     def observation_keras(self):
         observation = []
+        marine_x = []
+        marine_y = []
+        shard_x = []
+        shard_y = []
+
+        # for x in range(self.number_of_marines):
+        #     marine_x.append(self.position_marines[x][0])
+        #     marine_x.append(self.position_marines[x][1])
+        # for x in range(self.number_of_shards):
+        #     shard_x.append(self.position_shards[x][0])
+        #     shard_x.append(self.position_shards[x][1])
+        # observation = [np.array(marine_x), np.array(marine_y), np.array(shard_x), np.array(shard_y)]
+
         for x in range(self.number_of_marines):
             for y in range(0, 2):
                 observation.append(self.position_marines[x][y])
@@ -75,6 +90,7 @@ class Fcms:
     def collision_check(self, position):
         if position in self.position_shards:
             self.position_shards.remove(position)
+            self.number_of_shards -= 1
             self.reward += 1
 
 
@@ -90,13 +106,14 @@ class Fcms:
             self.position_marines[marine][1] = 0
 
     def action(self, action, marine = 0):
-        if action == 0:
+        action = action_space[action]
+        if action == ACTION_MOVE_UP:
             self.action_up(marine)
-        elif action == 1:
+        elif action == ACTION_MOVE_DOWN:
             self.action_down(marine)
-        elif action == 2:
+        elif action == ACTION_MOVE_LEFT:
             self.action_left(marine)
-        elif action == 3:
+        elif action == ACTION_MOVE_RIGHT:
             self.action_right(marine)
 
     def action_up(self, marine = 0):
@@ -143,3 +160,16 @@ class Fcms:
 
 fcms = Fcms(2, 20, 8, 8, True)
 print(fcms.observation_keras())
+
+fcms.action_up()
+fcms.observation()
+fcms.action_down()
+fcms.observation()
+fcms.action_left()
+fcms.observation()
+fcms.action_up()
+fcms.observation()
+fcms.action_up()
+fcms.observation()
+fcms.action_right()
+fcms.observation()
