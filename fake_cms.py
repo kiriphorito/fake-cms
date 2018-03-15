@@ -4,6 +4,18 @@ EMPTY = 0
 MARINE = 1
 MINERAL = 2
 
+ACTION_MOVE_UP = 'moveup'
+ACTION_MOVE_DOWN = 'movedown'
+ACTION_MOVE_LEFT = 'moveleft'
+ACTION_MOVE_RIGHT = 'moveright'
+
+action_space = [
+    ACTION_MOVE_UP,
+    ACTION_MOVE_DOWN,
+    ACTION_MOVE_LEFT,
+    ACTION_MOVE_RIGHT,
+]
+
 class Fcms:
     def __init__(self, marines = 1, shards = 20, grid_x = 5, grid_y = 5, verbose = False):
         self.verbose = verbose
@@ -30,8 +42,8 @@ class Fcms:
             if random_location not in self.position_shards and random_location not in self.position_marines:
                 self.position_marines.append(random_location)
         if self.verbose:
-            print(self.position_shards)
-            print(self.position_marines)
+            print("Marines: ", self.position_marines)
+            print("Shards: ", self.position_shards)
 
     def observation(self):
         self.grid_observation = [[0 for i in range(self.grid_width)] for j in range(self.grid_height)]
@@ -49,10 +61,23 @@ class Fcms:
                 print()
         return self.grid_observation
 
+    def observation_keras(self):
+        observation = []
+        for x in range(self.number_of_marines):
+            for y in range(0, 2):
+                observation.append(self.position_marines[x][y])
+        for x in range(self.number_of_shards):
+            for y in range(0, 2):
+                observation.append(self.position_shards[x][y])
+        return observation
+
+
     def collision_check(self, position):
         if position in self.position_shards:
             self.position_shards.remove(position)
             self.reward += 1
+
+
 
     def boundary_check(self, marine):
         if self.position_marines[marine][0] >= self.grid_width:
@@ -116,19 +141,5 @@ class Fcms:
         return None , reward, done, {}
 
 
-fcms = Fcms(1, 1, 8, 8, True)
-fcms.observation()
-
-
-fcms.action_up()
-fcms.observation()
-fcms.action_down()
-fcms.observation()
-fcms.action_left()
-fcms.observation()
-fcms.action_up()
-fcms.observation()
-fcms.action_up()
-fcms.observation()
-fcms.action_right()
-fcms.observation()
+fcms = Fcms(2, 20, 8, 8, True)
+print(fcms.observation_keras())

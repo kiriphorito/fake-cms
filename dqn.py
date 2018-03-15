@@ -211,22 +211,36 @@ class ReplayMemory(object):
 
 class DQN(nn.Module):
 
-    def __init__(self):
+    # def __init__(self):
+    #     super(DQN, self).__init__()
+    #     self.conv1 = nn.Conv2d(1, 16, kernel_size=5, stride=2)
+    #     self.bn1 = nn.BatchNorm2d(16)
+    #     self.conv2 = nn.Conv2d(16, 32, kernel_size=5, stride=2)
+    #     self.bn2 = nn.BatchNorm2d(32)
+    #     self.head = nn.Linear(448, 4) # Numbner of actions
+    #
+    # def forward(self, x):
+    #     x = F.relu(self.bn1(self.conv1(x)))
+    #     x = F.relu(self.bn2(self.conv2(x)))
+    #     x = F.relu(self.bn3(self.conv3(x)))
+    #     return self.head(x.view(x.size(0), -1))
+
+    def __init__(self, input_size = 64, hidden_size = 21, num_classes = 2):
+        """
+        Initialize a deep Q-learning network for testing algorithm
+            in_features: number of features of input.
+            num_actions: number of action-value to output, one-to-one correspondence to action in game.
+        """
         super(DQN, self).__init__()
-        self.conv1 = nn.Conv2d(3, 16, kernel_size=5, stride=2)
-        self.bn1 = nn.BatchNorm2d(16)
-        self.conv2 = nn.Conv2d(16, 32, kernel_size=5, stride=2)
-        self.bn2 = nn.BatchNorm2d(32)
-        self.conv3 = nn.Conv2d(32, 32, kernel_size=5, stride=2)
-        self.bn3 = nn.BatchNorm2d(32)
-        self.head = nn.Linear(448, 2)
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(hidden_size, num_classes)
 
     def forward(self, x):
-        x = F.relu(self.bn1(self.conv1(x)))
-        x = F.relu(self.bn2(self.conv2(x)))
-        x = F.relu(self.bn3(self.conv3(x)))
-        return self.head(x.view(x.size(0), -1))
-
+        out = self.fc1(x)
+        out = self.relu(out)
+        out = self.fc2(out)
+        return out
 
 ######################################################################
 # Input extraction
