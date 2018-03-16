@@ -39,10 +39,15 @@ class Fcms:
         self.position_shards = []
         self.collected_shards = []
         self.position_marines = []
+        self.absolute_shards = []
+
+        self.number_of_shards = self.absolute_number_of_shards
+
         while len(self.position_shards) < self.number_of_shards:
             random_location = [rnd.randint(0,self.grid_width - 1), rnd.randint(0,self.grid_height - 1)]
             if random_location not in self.position_shards:
                 self.position_shards.append(random_location)
+                self.absolute_shards.append(random_location)
         while len(self.position_marines) < self.number_of_marines:
             random_location = [rnd.randint(0,self.grid_width - 1), rnd.randint(0,self.grid_height - 1)]
             if random_location not in self.position_shards and random_location not in self.position_marines:
@@ -50,9 +55,7 @@ class Fcms:
         if self.verbose:
             print("Marines: ", self.position_marines)
             print("Shards: ", self.position_shards)
-
-        self.absolute_shards = self.position_shards
-        self.number_of_shards = self.absolute_number_of_shards
+   
 
     def observation(self):
         self.grid_observation = [[0 for i in range(self.grid_width)] for j in range(self.grid_height)]
@@ -90,11 +93,15 @@ class Fcms:
                 observation.append(self.position_marines[x][y])
         for x in range(self.absolute_number_of_shards):
             for y in range(0, 2):
+                print(self.absolute_shards)
+                print("i: ", x)
+                print("j: ", y)
                 observation.append(self.absolute_shards[x][y])
             if self.absolute_shards[x] in self.position_shards:
                 observation.append(1)
             else:
                 observation.append(0)
+
         return observation
 
 
@@ -103,8 +110,6 @@ class Fcms:
             self.position_shards.remove(position)
             self.number_of_shards -= 1
             self.reward += 1
-
-
 
     def boundary_check(self, marine):
         if self.position_marines[marine][0] >= self.grid_width:
