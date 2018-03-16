@@ -53,9 +53,10 @@ class Fcms:
             if random_location not in self.position_shards and random_location not in self.position_marines:
                 self.position_marines.append(random_location)
         if self.verbose:
-            print("Marines: ", self.position_marines)
-            print("Shards: ", self.position_shards)
-   
+            # print("Marines: ", self.position_marines)
+            # print("Shards: ", self.position_shards)
+            pass
+
 
     def observation(self):
         self.grid_observation = [[0 for i in range(self.grid_width)] for j in range(self.grid_height)]
@@ -123,6 +124,7 @@ class Fcms:
 
     def action(self, action, marine = 0):
         action = action_space[action]
+        print(action)
         if action == ACTION_MOVE_UP:
             self.action_up(marine)
         elif action == ACTION_MOVE_DOWN:

@@ -4,6 +4,7 @@ from keras.optimizers import *
 
 import random as rnd
 import numpy as np
+import time
 
 from fake_cms import Fcms
 
@@ -30,9 +31,11 @@ class Agent():
     self.memory.append(transition)
 
   def act(self, state):
-    if rnd.uniform(0, 1) < self.epilson and not self.first_time:
+    if rnd.uniform(0, 1) < self.epilson or self.first_time:
+        print("RANDOM")
         self.first_time = False
-        return rnd.randint(self.action_space - 1)
+        return rnd.randint(0 , self.action_space - 1)
+    print("NOT RANDOM")
     return np.argmax(self.model.predict(state)[0])
 
   def optimise(self, done):
@@ -52,11 +55,11 @@ STEPS = 250
 AVERAGE = 10
 
 if __name__ == '__main__':
-  env = Fcms(1, 1, 3, 3, False)
-  agent = Agent(5, len(env.action_space), 32, 0.95, 0.01)
-	
+  env = Fcms(1, 1, 3, 3, True)
+  agent = Agent(5, len(env.action_space), 32, 0.95, 0.1)
+
   number_of_rewards = 0
-  
+
   rewards = np.zeros(AVERAGE)
 
   for episode in range(EPISODES):
@@ -69,10 +72,12 @@ if __name__ == '__main__':
     for step in range(STEPS):
       action = agent.act(state)
 
+      print("Step:",step)
       _, reward, done, _ = env.step(action)
       # if done:
       #   print("See you next Tuesday?!", reward)
-
+      env.observation()
+      time.sleep(0.05)
       next_state = np.array(env.observation_keras())
       next_state = np.reshape(next_state, [1,5])
 
@@ -84,11 +89,10 @@ if __name__ == '__main__':
       if done:
         agent.optimise(done)
         break
-    
+
     # print(total_reward)
     rewards[number_of_rewards % AVERAGE] = total_reward
     # np.insert(rewards, number_of_rewards % AVERAGE, total_reward)
     number_of_rewards += 1
     if number_of_rewards % AVERAGE == 0:
       print(np.mean(rewards))
-    
