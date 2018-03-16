@@ -21,6 +21,9 @@ class Fcms:
     def __init__(self, marines = 1, shards = 20, grid_x = 5, grid_y = 5, verbose = False):
         self.verbose = verbose
 
+        self.absolute_shards = None
+        self.absolute_number_of_shards = shards
+
         self.number_of_marines = marines
         self.number_of_shards = shards
         self.grid_width = grid_x
@@ -34,6 +37,7 @@ class Fcms:
 
     def reset(self):
         self.position_shards = []
+        self.collected_shards = []
         self.position_marines = []
         while len(self.position_shards) < self.number_of_shards:
             random_location = [rnd.randint(0,self.grid_width - 1), rnd.randint(0,self.grid_height - 1)]
@@ -46,6 +50,9 @@ class Fcms:
         if self.verbose:
             print("Marines: ", self.position_marines)
             print("Shards: ", self.position_shards)
+
+        self.absolute_shards = self.position_shards
+        self.number_of_shards = self.absolute_number_of_shards
 
     def observation(self):
         self.grid_observation = [[0 for i in range(self.grid_width)] for j in range(self.grid_height)]
@@ -81,9 +88,13 @@ class Fcms:
         for x in range(self.number_of_marines):
             for y in range(0, 2):
                 observation.append(self.position_marines[x][y])
-        for x in range(self.number_of_shards):
+        for x in range(self.absolute_number_of_shards):
             for y in range(0, 2):
-                observation.append(self.position_shards[x][y])
+                observation.append(self.absolute_shards[x][y])
+            if self.absolute_shards[x] in self.position_shards:
+                observation.append(1)
+            else:
+                observation.append(0)
         return observation
 
 
@@ -158,18 +169,18 @@ class Fcms:
         return None , reward, done, {}
 
 
-fcms = Fcms(2, 20, 8, 8, True)
-print(fcms.observation_keras())
+# fcms = Fcms(2, 20, 8, 8, True)
+# print(fcms.observation_keras())
 
-fcms.action_up()
-fcms.observation()
-fcms.action_down()
-fcms.observation()
-fcms.action_left()
-fcms.observation()
-fcms.action_up()
-fcms.observation()
-fcms.action_up()
-fcms.observation()
-fcms.action_right()
-fcms.observation()
+# fcms.action_up()
+# fcms.observation()
+# fcms.action_down()
+# fcms.observation()
+# fcms.action_left()
+# fcms.observation()
+# fcms.action_up()
+# fcms.observation()
+# fcms.action_up()
+# fcms.observation()
+# fcms.action_right()
+# fcms.observation()

@@ -52,12 +52,12 @@ STEPS = 250
 
 if __name__ == '__main__':
   env = Fcms(1, 1, 8, 8, True)
-  agent = Agent(4, len(env.action_space), 32, 0.95, 0.01)
+  agent = Agent(5, len(env.action_space), 32, 0.95, 0.01)
 
   for episode in range(EPISODES):
     env.reset()
     state = np.array(env.observation_keras())
-    state = np.reshape(state, [1,4])
+    state = np.reshape(state, [1,5])
 
     total_reward = 0
 
@@ -71,7 +71,7 @@ if __name__ == '__main__':
         break
 
       next_state = np.array(env.observation_keras())
-      next_state = np.reshape(next_state, [1,4])
+      next_state = np.reshape(next_state, [1,5])
 
       total_reward += reward
 
