@@ -47,12 +47,12 @@ class Agent():
 
         self.model.fit(state, new_rewards, verbose=0)
 
-EPISODES = 1000
+EPISODES = 100000
 STEPS = 250
 AVERAGE = 10
 
 if __name__ == '__main__':
-  env = Fcms(1, 1, 8, 8, False)
+  env = Fcms(1, 1, 3, 3, False)
   agent = Agent(5, len(env.action_space), 32, 0.95, 0.01)
 	
   number_of_rewards = 0
@@ -70,14 +70,8 @@ if __name__ == '__main__':
       action = agent.act(state)
 
       _, reward, done, _ = env.step(action)
-
-      if done:
-        if number_of_rewards % AVERAGE == 0:
-        	print("Average Reward: {}".format(np.mean(rewards)))
-        rewards[number_of_rewards % AVERAGE] = total_reward
-        number_of_rewards += 1
-        print(number_of_rewards)
-        break
+      # if done:
+      #   print("See you next Tuesday?!", reward)
 
       next_state = np.array(env.observation_keras())
       next_state = np.reshape(next_state, [1,5])
@@ -87,5 +81,14 @@ if __name__ == '__main__':
       agent.store((state, action, reward, next_state))
       state = next_state
 
-      if step == STEPS - 1:
+      if done:
         agent.optimise(done)
+        break
+    
+    # print(total_reward)
+    rewards[number_of_rewards % AVERAGE] = total_reward
+    # np.insert(rewards, number_of_rewards % AVERAGE, total_reward)
+    number_of_rewards += 1
+    if number_of_rewards % AVERAGE == 0:
+      print(np.mean(rewards))
+    

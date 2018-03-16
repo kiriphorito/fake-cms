@@ -170,7 +170,8 @@ class Fcms:
             done = True
 
         reward = self.reward
-
+        # if reward == 1:
+        #     print("See you next Tuesday?!", reward)
         return None , reward, done, {}
 
 
