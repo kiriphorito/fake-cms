@@ -93,9 +93,9 @@ class Fcms:
                 observation.append(self.position_marines[x][y])
         for x in range(self.absolute_number_of_shards):
             for y in range(0, 2):
-                print(self.absolute_shards)
-                print("i: ", x)
-                print("j: ", y)
+                # print(self.absolute_shards)
+                # print("i: ", x)
+                # print("j: ", y)
                 observation.append(self.absolute_shards[x][y])
             if self.absolute_shards[x] in self.position_shards:
                 observation.append(1)
